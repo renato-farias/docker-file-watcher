@@ -1,0 +1,23 @@
+services:
+  docker-file-watcher:
+    image: "rcdfs/docker-file-watcher:latest"
+    container_name: "docker-file-watcher"
+    configs:
+    - source: docker-file-watcher.config
+      target: /tmp/docker-file-watcher.config
+
+    volumes:
+    - "<PATH_TO>/docker-compose.yaml:/tmp/docker-compose.yaml:ro"
+    - "/var/run/docker.sock:/var/run/docker.sock"
+    - "<PATH_TO>/src/:/watch:ro"
+
+    environment:
+    - PROJECT_NAME=PROJECT_TO_WATCH
+
+    restart: always
+
+configs:
+  docker-file-watcher.config:
+    content: |
+      webapp .*\.py
+      another-service .*\.(css|js)
